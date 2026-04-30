@@ -496,92 +496,13 @@
     <h2 class="section-title">Tournament Agenda</h2>
     <p class="section-desc">เลือกรายการที่ต้องการสมัครและกรอกข้อมูลได้เลย — ลิงค์จะพาไปยังฟอร์มสมัครโดยตรง</p>
 
-    <div class="agenda-grid">
-
-      <!-- Early Bird -->
-      <div class="agenda-card">
-        <div class="agenda-card-header">
-          <div class="agenda-badge badge-gold">⭐ Early Bird · Sponsor Round</div>
-          <div class="agenda-card-title">WOOPS Tournament #4</div>
-          <div class="agenda-card-sub">Early Bird Registration — ปิดรับก่อนรอบทั่วไป</div>
-        </div>
-        <div class="agenda-card-body">
-          <div class="agenda-info">
-            <div class="agenda-row"><span class="icon">📅</span> 23–24 May 2026</div>
-            <div class="agenda-row"><span class="icon">📍</span> Alpine Tennis Club</div>
-            <div class="agenda-row"><span class="icon">💰</span> Singles ฿1,699 · Doubles ฿2,999</div>
-            <div class="agenda-row"><span class="icon">🏆</span> Round Robin · All Levels</div>
-            <div class="agenda-row"><span class="icon">⚡</span> ชำระเงินได้ในฟอร์มเลย</div>
-          </div>
-          <!-- 🔗 ใส่ URL Apps Script Early Bird ตรงนี้ -->
-          <a href="YOUR_EARLY_BIRD_APPS_SCRIPT_URL" target="_blank" class="agenda-form-link gold-link">
-            👑 สมัคร Early Bird
-          </a>
-        </div>
+    <!-- Cards render here dynamically from Google Sheets -->
+    <div class="agenda-grid" id="agenda-grid">
+      <!-- Loading state -->
+      <div id="agenda-loading" style="grid-column:1/-1;text-align:center;padding:48px;color:var(--g500);">
+        <div style="font-size:32px;margin-bottom:12px;">⏳</div>
+        <div style="font-size:14px;">กำลังโหลดข้อมูล...</div>
       </div>
-
-      <!-- Open Registration -->
-      <div class="agenda-card">
-        <div class="agenda-card-header">
-          <div class="agenda-badge badge-blue">🎾 Open Registration</div>
-          <div class="agenda-card-title">WOOPS Tournament #4</div>
-          <div class="agenda-card-sub">รอบทั่วไป — เปิดรับ 1 May 2026 เวลา 18:00</div>
-        </div>
-        <div class="agenda-card-body">
-          <div class="agenda-info">
-            <div class="agenda-row"><span class="icon">📅</span> 23–24 May 2026</div>
-            <div class="agenda-row"><span class="icon">📍</span> Alpine Tennis Club</div>
-            <div class="agenda-row"><span class="icon">💰</span> ติดตามช่องทาง Social</div>
-            <div class="agenda-row"><span class="icon">🏆</span> Round Robin · All Levels</div>
-            <div class="agenda-row"><span class="icon">📢</span> ประกาศรายชื่อ 4 May 2026</div>
-          </div>
-          <!-- 🔗 ใส่ URL Apps Script T4 รอบทั่วไป ตรงนี้ -->
-          <a href="YOUR_T4_APPS_SCRIPT_URL" target="_blank" class="agenda-form-link">
-            📨 สมัครรอบทั่วไป
-          </a>
-        </div>
-      </div>
-
-      <!-- Payment Form -->
-      <div class="agenda-card">
-        <div class="agenda-card-header">
-          <div class="agenda-badge badge-green">💳 Payment</div>
-          <div class="agenda-card-title">ชำระค่าสมัคร</div>
-          <div class="agenda-card-sub">สำหรับผู้ที่ได้รับการยืนยันสิทธิ์แล้ว</div>
-        </div>
-        <div class="agenda-card-body">
-          <div class="agenda-info">
-            <div class="agenda-row"><span class="icon">⏰</span> Deadline: 5 May 2026 · 22:00</div>
-            <div class="agenda-row"><span class="icon">🏦</span> KBank · 204-8-29228-6</div>
-            <div class="agenda-row"><span class="icon">📋</span> บจก. ฟรุตตี้ดี</div>
-            <div class="agenda-row"><span class="icon">📎</span> อัพโหลดสลิปในฟอร์ม</div>
-          </div>
-          <!-- 🔗 ใส่ URL Apps Script Payment Form ตรงนี้ -->
-          <a href="YOUR_PAYMENT_APPS_SCRIPT_URL" target="_blank" class="agenda-form-link">
-            💳 ชำระเงิน
-          </a>
-        </div>
-      </div>
-
-      <!-- Coming Soon -->
-      <div class="agenda-card" style="opacity:.6;">
-        <div class="agenda-card-header">
-          <div class="agenda-badge badge-blue">🔜 Coming Soon</div>
-          <div class="agenda-card-title">WOOPS Tournament #5</div>
-          <div class="agenda-card-sub">รายละเอียดจะประกาศเร็วๆ นี้</div>
-        </div>
-        <div class="agenda-card-body">
-          <div class="agenda-info">
-            <div class="agenda-row"><span class="icon">📅</span> TBA 2026</div>
-            <div class="agenda-row"><span class="icon">📍</span> Alpine Tennis Club</div>
-            <div class="agenda-row"><span class="icon">📢</span> ติดตามทาง LINE OA</div>
-          </div>
-          <div style="background:var(--g200);border-radius:12px;padding:13px;text-align:center;font-size:14px;color:var(--g500);font-weight:600;">
-            🔔 เร็วๆ นี้
-          </div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
@@ -759,6 +680,92 @@
 </footer>
 
 <script>
+  // ── CMS API URL ─────────────────────────────────────────────
+  // วาง URL ของ Apps Script CMS ที่ Deploy แล้วตรงนี้
+  var CMS_API_URL = 'https://script.google.com/macros/s/AKfycbyVigvyFrzSD2tcK9rIXk4xKo4gU_7iQ4RkcSkESvpvhO3RGkRh4E6lNOf4VEw1GBpQTg/exec';
+
+  // ── Render Agenda from Google Sheets ────────────────────────
+  var ICON_MAP = {
+    'Date':     '📅', 'Location': '📍', 'Fee':      '💰',
+    'Category': '🏆', 'Note':     '⚡'
+  };
+
+  function renderAgenda(items) {
+    var grid = document.getElementById('agenda-grid');
+    if (!items || !items.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--g500);">ยังไม่มีรายการในขณะนี้</div>';
+      return;
+    }
+
+    // เรียงตาม Sort Order
+    items.sort(function(a, b) { return (a['Sort Order'] || 0) - (b['Sort Order'] || 0); });
+
+    var html = '';
+    items.forEach(function(item) {
+      var badgeClass = 'badge-' + (item['Badge Type'] || 'blue');
+      var btnClass   = item['Button Style'] === 'gold' ? 'agenda-form-link gold-link' : 'agenda-form-link';
+      var hasURL     = item['Button URL'] && item['Button URL'] !== '' && !item['Button URL'].startsWith('YOUR_');
+      var isGray     = item['Badge Type'] === 'gray';
+
+      var rows = '';
+      var fields = [
+        { key: 'Date',     icon: '📅' },
+        { key: 'Location', icon: '📍' },
+        { key: 'Fee',      icon: '💰' },
+        { key: 'Category', icon: '🏆' },
+        { key: 'Note',     icon: '⚡' }
+      ];
+      fields.forEach(function(f) {
+        if (item[f.key]) {
+          rows += '<div class="agenda-row"><span class="icon">' + f.icon + '</span> ' + item[f.key] + '</div>';
+        }
+      });
+
+      var btn = hasURL
+        ? '<a href="' + item['Button URL'] + '" target="_blank" class="' + btnClass + '">' + item['Button Text'] + '</a>'
+        : '<div style="background:var(--g200);border-radius:12px;padding:13px;text-align:center;font-size:14px;color:var(--g500);font-weight:600;">' + item['Button Text'] + '</div>';
+
+      html += '<div class="agenda-card"' + (isGray ? ' style="opacity:.6;"' : '') + '>';
+      html += '<div class="agenda-card-header">';
+      html += '<div class="agenda-badge ' + badgeClass + '">' + item['Badge Label'] + '</div>';
+      html += '<div class="agenda-card-title">' + item['Event Name'] + '</div>';
+      html += '<div class="agenda-card-sub">' + (item['Subtitle'] || '') + '</div>';
+      html += '</div>';
+      html += '<div class="agenda-card-body">';
+      html += '<div class="agenda-info">' + rows + '</div>';
+      html += btn;
+      html += '</div></div>';
+    });
+
+    grid.innerHTML = html;
+  }
+
+  function loadAgenda() {
+    if (!CMS_API_URL || CMS_API_URL === 'YOUR_CMS_APPS_SCRIPT_URL') {
+      // ถ้ายังไม่ได้ตั้งค่า URL ให้แสดง placeholder
+      renderFallbackAgenda();
+      return;
+    }
+    fetch(CMS_API_URL + '?section=agenda')
+      .then(function(r) { return r.json(); })
+      .then(function(data) { renderAgenda(data); })
+      .catch(function() { renderFallbackAgenda(); });
+  }
+
+  function renderFallbackAgenda() {
+    // แสดง card ตัวอย่างเมื่อยังไม่ได้เชื่อม CMS
+    renderAgenda([
+      { 'Event Name':'WOOPS Tournament #4','Badge Label':'⭐ Early Bird · Sponsor Round','Badge Type':'gold','Subtitle':'Early Bird Registration','Date':'23–24 May 2026','Location':'Alpine Tennis Club','Fee':'Singles ฿1,699 · Doubles ฿2,999','Category':'Round Robin · All Levels','Note':'ชำระเงินได้ในฟอร์มเลย','Button Text':'👑 สมัคร Early Bird','Button URL':'','Button Style':'gold','Sort Order':1 },
+      { 'Event Name':'WOOPS Tournament #4','Badge Label':'🎾 Open Registration','Badge Type':'blue','Subtitle':'รอบทั่วไป — เปิดรับ 1 May 2026 เวลา 18:00','Date':'23–24 May 2026','Location':'Alpine Tennis Club','Fee':'ติดตามช่องทาง Social','Category':'Round Robin · All Levels','Note':'ประกาศรายชื่อ 4 May 2026','Button Text':'📨 สมัครรอบทั่วไป','Button URL':'','Button Style':'dark','Sort Order':2 },
+      { 'Event Name':'ชำระค่าสมัคร','Badge Label':'💳 Payment','Badge Type':'green','Subtitle':'สำหรับผู้ที่ได้รับการยืนยันสิทธิ์แล้ว','Date':'Deadline: 5 May 2026 · 22:00','Location':'KBank · 204-8-29228-6','Fee':'บจก. ฟรุตตี้ดี','Category':'อัพโหลดสลิปในฟอร์ม','Note':'','Button Text':'💳 ชำระเงิน','Button URL':'','Button Style':'dark','Sort Order':3 },
+      { 'Event Name':'WOOPS Tournament #5','Badge Label':'🔜 Coming Soon','Badge Type':'gray','Subtitle':'รายละเอียดจะประกาศเร็วๆ นี้','Date':'TBA 2026','Location':'Alpine Tennis Club','Fee':'','Category':'','Note':'ติดตามทาง LINE OA','Button Text':'🔔 เร็วๆ นี้','Button URL':'','Button Style':'dark','Sort Order':4 }
+    ]);
+  }
+
+  // โหลด Agenda เมื่อหน้าเว็บเปิด
+  document.addEventListener('DOMContentLoaded', function() { loadAgenda(); });
+
+  // ── Drawer ──────────────────────────────────────────────────
   function toggleDrawer() {
     var drawer   = document.getElementById('drawer');
     var overlay  = document.getElementById('drawer-overlay');
