@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WOOPS Social Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #0F1C3F;
+    --navy2:   #162447;
+    --navy3:   #0A1228;
+    --gold:    #D4A843;
+    --gold-lt: #F0C660;
+    --gold-dk: #A07828;
+    --blue:    #2563EB;
+    --blue-lt: #3B82F6;
+    --blue-bg: #EFF6FF;
+    --green:   #059669;
+    --green-bg:#ECFDF5;
+    --red:     #DC2626;
+    --g100:#F8FAFC; --g200:#F1F5F9; --g300:#E2E8F0;
+    --g400:#CBD5E1; --g500:#94A3B8; --g600:#64748B;
+    --g700:#475569; --g800:#334155; --g900:#1E293B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+  body { font-family: 'Inter','Kanit',sans-serif; background: #fff; color: var(--g900); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    background: rgba(10,18,40,.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212,168,67,.2);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px; height: 64px; gap: 20px;
+  }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+
+  /* Hamburger button */
+  .hamburger {
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 5px; width: 40px; height: 40px; cursor: pointer;
+    border: none; background: transparent; border-radius: 10px;
+    padding: 8px; transition: background .18s; flex-shrink: 0;
+  }
+  .hamburger:hover { background: rgba(255,255,255,.1); }
+  .hamburger span {
+    display: block; height: 2px; border-radius: 2px;
+    background: #fff; transition: all .3s ease;
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-logo {
+    font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -.5px;
+    display: flex; align-items: center; gap: 10px; text-decoration: none;
+  }
+  .nav-logo .logo-badge {
+    background: linear-gradient(135deg, var(--gold-dk), var(--gold), var(--gold-lt));
+    color: var(--navy3); font-size: 11px; font-weight: 800;
+    padding: 3px 10px; border-radius: 20px; letter-spacing: 1px;
+  }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-links a {
+    color: rgba(255,255,255,.65); font-size: 13px; font-weight: 500;
+    text-decoration: none; padding: 6px 14px; border-radius: 8px;
+    transition: all .18s;
+  }
+  .nav-links a:hover { color: #fff; background: rgba(255,255,255,.08); }
+  .nav-links a.active { color: var(--gold-lt); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--gold-dk), var(--gold-lt));
+    color: var(--navy3); font-size: 13px; font-weight: 700;
+    padding: 8px 20px; border-radius: 10px; text-decoration: none;
+    transition: all .2s; box-shadow: 0 4px 14px rgba(212,168,67,.35);
+    white-space: nowrap;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,168,67,.5); }
+
+  /* ── DRAWER OVERLAY ── */
+  .drawer-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55);
+    z-index: 299; opacity: 0; pointer-events: none;
+    transition: opacity .3s ease; backdrop-filter: blur(3px);
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+  /* ── DRAWER ── */
+  .drawer {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 300px; z-index: 300;
+    background: var(--navy3);
+    border-right: 1px solid rgba(212,168,67,.15);
+    transform: translateX(-100%);
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+    box-shadow: 8px 0 40px rgba(0,0,0,.5);
+  }
+  .drawer.open { transform: translateX(0); }
+
+  .drawer-header {
+    padding: 20px 24px 18px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 64px;
+  }
+  .drawer-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.35); letter-spacing: 2px; text-transform: uppercase; }
+  .drawer-close {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(255,255,255,.07); border: none; color: rgba(255,255,255,.6);
+    font-size: 18px; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: all .18s;
+  }
+  .drawer-close:hover { background: rgba(255,255,255,.14); color: #fff; }
+
+  .drawer-nav { padding: 16px 12px; flex: 1; overflow-y: auto; }
+  .drawer-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border-radius: 14px; text-decoration: none;
+    color: rgba(255,255,255,.75); font-size: 15px; font-weight: 500;
+    transition: all .18s; margin-bottom: 4px;
+  }
+  .drawer-item:hover { background: rgba(255,255,255,.07); color: #fff; }
+  .drawer-item.active { background: rgba(37,99,235,.2); color: #fff; border: 1px solid rgba(59,130,246,.3); }
+  .drawer-item .d-icon {
+    width: 40px; height: 40px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; flex-shrink: 0;
+  }
+  .drawer-item .d-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+  .drawer-item .d-texts { display: flex; flex-direction: column; }
+
+  .drawer-section-label {
+    font-size: 10px; font-weight: 700; color: rgba(255,255,255,.25);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 16px 16px 8px; margin-top: 8px;
+  }
+  .drawer-divider { height: 1px; background: rgba(255,255,255,.06); margin: 8px 12px; }
+
+  .drawer-footer {
+    padding: 16px 20px 24px;
+    border-top: 1px solid rgba(255,255,255,.07);
+  }
+  .drawer-register {
+    display: block; text-align: center;
+    background: linear-gradient(135deg, var(--gold-dk), var(--gold-lt));
+    color: var(--navy3); font-size: 14px; font-weight: 800;
+    padding: 13px; border-radius: 12px; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(212,168,67,.35); transition: all .2s;
+    margin-bottom: 12px;
+  }
+  .drawer-register:hover { box-shadow: 0 8px 24px rgba(212,168,67,.55); transform: translateY(-1px); }
+  .drawer-line { font-size: 12px; color: rgba(255,255,255,.3); text-align: center; }
+  .drawer-line a { color: rgba(255,255,255,.5); text-decoration: none; }
+  .drawer-line a:hover { color: var(--gold-lt); }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh; padding-top: 64px;
+    background: linear-gradient(160deg, #060e22 0%, #0d2060 50%, #091840 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 24px 80px; position: relative; overflow: hidden;
+  }
+  #home::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(37,99,235,.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(212,168,67,.12); border: 1px solid rgba(212,168,67,.3);
+    color: var(--gold-lt); font-size: 11px; font-weight: 700;
+    letter-spacing: 1.8px; text-transform: uppercase;
+    padding: 6px 18px; border-radius: 40px; margin-bottom: 28px;
+  }
+  .hero-title {
+    font-size: clamp(44px, 8vw, 88px); font-weight: 900;
+    color: #fff; letter-spacing: -3px; line-height: 1;
+    margin-bottom: 10px;
+  }
+  .hero-title span { color: var(--gold-lt); }
+  .hero-sub {
+    font-size: 18px; color: rgba(255,255,255,.5);
+    margin-bottom: 28px; font-weight: 400;
+  }
+  .hero-desc {
+    font-size: 16px; color: rgba(255,255,255,.75);
+    max-width: 520px; line-height: 1.85; margin-bottom: 44px;
+  }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold-dk), var(--gold), var(--gold-lt));
+    color: var(--navy3); font-size: 15px; font-weight: 800;
+    padding: 14px 32px; border-radius: 12px; text-decoration: none;
+    box-shadow: 0 8px 28px rgba(212,168,67,.45); transition: all .2s;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(212,168,67,.6); }
+  .btn-outline {
+    background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.25);
+    color: #fff; font-size: 15px; font-weight: 600;
+    padding: 14px 32px; border-radius: 12px; text-decoration: none; transition: all .2s;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.4); }
+  .hero-stats {
+    display: flex; gap: 48px; margin-top: 72px; flex-wrap: wrap; justify-content: center;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 36px; font-weight: 900; color: var(--gold-lt); letter-spacing: -1px; }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  /* ── SECTIONS ── */
+  section { padding: 96px 48px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--blue); margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px); font-weight: 800;
+    color: var(--navy2); letter-spacing: -1px; line-height: 1.1; margin-bottom: 16px;
+  }
+  .section-desc { font-size: 16px; color: var(--g600); line-height: 1.8; max-width: 560px; margin-bottom: 52px; }
+
+  /* ── AGENDA ── */
+  #agenda { background: var(--g100); }
+  .agenda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .agenda-card {
+    background: #fff; border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+    overflow: hidden; transition: transform .2s, box-shadow .2s;
+  }
+  .agenda-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.12); }
+  .agenda-card-header { padding: 24px 28px 20px; border-bottom: 1px solid var(--g200); }
+  .agenda-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 12px;
+  }
+  .badge-gold { background: rgba(212,168,67,.12); color: var(--gold-dk); border: 1px solid rgba(212,168,67,.3); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid #BFDBFE; }
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid #A7F3D0; }
+  .agenda-card-title { font-size: 20px; font-weight: 800; color: var(--navy2); margin-bottom: 6px; }
+  .agenda-card-sub { font-size: 13px; color: var(--g500); }
+  .agenda-card-body { padding: 20px 28px 24px; }
+  .agenda-info { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  .agenda-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--g700); }
+  .agenda-row .icon { font-size: 16px; width: 24px; }
+  .agenda-form-link {
+    display: block; width: 100%; text-align: center;
+    background: linear-gradient(135deg, var(--navy2), var(--navy));
+    color: #fff; font-size: 14px; font-weight: 700;
+    padding: 13px; border-radius: 12px; text-decoration: none;
+    transition: all .2s; box-shadow: 0 4px 14px rgba(15,28,63,.25);
+  }
+  .agenda-form-link:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(15,28,63,.4); }
+  .agenda-form-link.gold-link {
+    background: linear-gradient(135deg, var(--gold-dk), var(--gold-lt));
+    color: var(--navy3); box-shadow: 0 4px 14px rgba(212,168,67,.35);
+  }
+  .agenda-form-link.gold-link:hover { box-shadow: 0 8px 24px rgba(212,168,67,.55); }
+
+  /* ── PLAYER PROFILES ── */
+  #profiles { background: #fff; }
+  .profiles-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .profile-card {
+    background: var(--g100); border-radius: 18px; padding: 24px 20px;
+    text-align: center; border: 1.5px solid var(--g200);
+    transition: all .2s; cursor: pointer;
+  }
+  .profile-card:hover { border-color: var(--blue); background: var(--blue-bg); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(37,99,235,.12); }
+  .profile-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy2), var(--blue));
+    margin: 0 auto 14px; display: flex; align-items: center;
+    justify-content: center; font-size: 28px;
+  }
+  .profile-name { font-size: 15px; font-weight: 700; color: var(--navy2); margin-bottom: 4px; }
+  .profile-level { font-size: 12px; color: var(--g500); margin-bottom: 12px; }
+  .profile-stats { display: flex; justify-content: center; gap: 20px; }
+  .profile-stat-num { font-size: 18px; font-weight: 800; color: var(--navy2); }
+  .profile-stat-label { font-size: 10px; color: var(--g500); text-transform: uppercase; letter-spacing: .8px; }
+  .profiles-search {
+    display: flex; gap: 12px; margin-bottom: 36px;
+  }
+  .profiles-search input {
+    flex: 1; padding: 12px 18px; border: 1.5px solid var(--g300);
+    border-radius: 12px; font-size: 14px; font-family: inherit;
+    outline: none; background: var(--g100);
+  }
+  .profiles-search input:focus { border-color: var(--blue); background: #fff; }
+
+  /* ── HALL OF FAME ── */
+  #halloffame { background: linear-gradient(160deg, var(--navy3) 0%, var(--navy2) 100%); }
+  #halloffame .section-tag { color: var(--gold-lt); }
+  #halloffame .section-title { color: #fff; }
+  #halloffame .section-desc { color: rgba(255,255,255,.55); }
+  .hof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .hof-card {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px; padding: 32px 24px; text-align: center;
+    transition: all .2s;
+  }
+  .hof-card:hover { background: rgba(255,255,255,.09); transform: translateY(-3px); }
+  .hof-trophy { font-size: 48px; margin-bottom: 16px; }
+  .hof-tournament { font-size: 11px; font-weight: 700; color: var(--gold-lt); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+  .hof-winner { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .hof-category { font-size: 13px; color: rgba(255,255,255,.5); margin-bottom: 16px; }
+  .hof-divider { height: 1px; background: rgba(255,255,255,.1); margin: 16px 0; }
+  .hof-runner { font-size: 12px; color: rgba(255,255,255,.4); }
+  .hof-runner strong { color: rgba(255,255,255,.7); }
+
+  /* ── GALLERY ── */
+  #gallery { background: var(--g100); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+  .gallery-item {
+    border-radius: 14px; overflow: hidden;
+    background: var(--g300); aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; cursor: pointer;
+    transition: transform .2s; position: relative;
+  }
+  .gallery-item:hover { transform: scale(1.03); }
+  .gallery-item.large { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; min-height: 280px; }
+  .gallery-overlay {
+    position: absolute; inset: 0; background: rgba(10,18,40,.5);
+    opacity: 0; transition: opacity .2s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 600; color: #fff;
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-upload-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue); color: #fff; font-size: 14px; font-weight: 600;
+    padding: 11px 24px; border-radius: 12px; text-decoration: none;
+    margin-top: 24px; transition: all .2s;
+  }
+  .gallery-upload-btn:hover { background: var(--navy2); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy3);
+    padding: 52px 48px 36px;
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; gap: 32px; flex-wrap: wrap; }
+  .footer-logo { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+  .footer-logo span { color: var(--gold-lt); }
+  .footer-tagline { font-size: 13px; color: rgba(255,255,255,.4); }
+  .footer-links h4 { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.4); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+  .footer-links a { display: block; color: rgba(255,255,255,.65); font-size: 14px; text-decoration: none; margin-bottom: 8px; transition: color .15s; }
+  .footer-links a:hover { color: #fff; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: rgba(255,255,255,.3); flex-wrap: wrap; gap: 8px; }
+
+  /* ── SCROLL DIVIDER ── */
+  .wave-divider { height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: .3; }
+
+  @media(max-width: 900px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    section { padding: 72px 20px; }
+    .agenda-grid { grid-template-columns: 1fr; }
+    .profiles-grid { grid-template-columns: repeat(2, 1fr); }
+    .hof-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-item.large { grid-column: span 1; grid-row: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── DRAWER OVERLAY ── -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- ── DRAWER ── -->
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-title">Navigation</div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+
+  <nav class="drawer-nav">
+    <div class="drawer-section-label">🎾 Tournament</div>
+    <a href="#agenda" class="drawer-item" onclick="closeDrawer()">
+      <div class="d-icon" style="background:rgba(212,168,67,.15);">📅</div>
+      <div class="d-texts">
+        <span>Agenda</span>
+        <span class="d-sub">ตารางและรายการแข่งขัน</span>
+      </div>
+    </a>
+    <a href="#agenda" class="drawer-item" onclick="closeDrawer()">
+      <div class="d-icon" style="background:rgba(212,168,67,.15);">📝</div>
+      <div class="d-texts">
+        <span>Registration Forms</span>
+        <span class="d-sub">ฟอร์มสมัครทุกรายการ</span>
+      </div>
+    </a>
+
+    <div class="drawer-divider"></div>
+    <div class="drawer-section-label">👥 Community</div>
+
+    <a href="#profiles" class="drawer-item" onclick="closeDrawer()">
+      <div class="d-icon" style="background:rgba(37,99,235,.15);">👤</div>
+      <div class="d-texts">
+        <span>Player Profiles</span>
+        <span class="d-sub">โปรไฟล์นักกีฬาทุกคน</span>
+      </div>
+    </a>
+    <a href="#halloffame" class="drawer-item" onclick="closeDrawer()">
+      <div class="d-icon" style="background:rgba(212,168,67,.15);">🏆</div>
+      <div class="d-texts">
+        <span>Hall of Fame</span>
+        <span class="d-sub">ผู้ชนะจากทุก Tournament</span>
+      </div>
+    </a>
+    <a href="#gallery" class="drawer-item" onclick="closeDrawer()">
+      <div class="d-icon" style="background:rgba(5,150,105,.15);">📸</div>
+      <div class="d-texts">
+        <span>Photo Gallery</span>
+        <span class="d-sub">ภาพบรรยากาศทุกงาน</span>
+      </div>
+    </a>
+  </nav>
+
+  <div class="drawer-footer">
+    <a href="#agenda" class="drawer-register" onclick="closeDrawer()">🎾 Register Now</a>
+    <div class="drawer-line">LINE OA: <a href="#">@woops.socialclub</a></div>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-left">
+    <button class="hamburger" id="hamburger" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="#home" class="nav-logo">
+      WOOPS <span class="logo-badge">Social Club</span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="#agenda">Agenda</a>
+    <a href="#profiles">Players</a>
+    <a href="#halloffame">Hall of Fame</a>
+    <a href="#gallery">Gallery</a>
+  </div>
+  <a href="#agenda" class="nav-cta">🎾 Register Now</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="home">
+  <div class="hero-pill">🎾 &nbsp;Est. 2023 · Bangkok, Thailand</div>
+  <h1 class="hero-title">WOOPS<br><span>Social Club</span></h1>
+  <div class="hero-sub">Alpine Tennis Club · Bangkok</div>
+  <p class="hero-desc">
+    คอมมูนิตี้เทนนิสที่รวมคนรักกีฬาเทนนิสทุกระดับ<br>
+    A community for tennis lovers of all levels.
+  </p>
+  <div class="hero-btns">
+    <a href="#agenda" class="btn-gold">🏆 ดูรายการแข่งขัน</a>
+    <a href="#profiles" class="btn-outline">👤 Player Profiles</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Tournaments</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">200+</div>
+      <div class="stat-label">Players</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Days / Event</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">10+</div>
+      <div class="stat-label">Categories</div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider"></div>
+
+<!-- ── AGENDA ── -->
+<section id="agenda">
+  <div class="section-inner">
+    <div class="section-tag">📅 Upcoming Events</div>
+    <h2 class="section-title">Tournament Agenda</h2>
+    <p class="section-desc">เลือกรายการที่ต้องการสมัครและกรอกข้อมูลได้เลย — ลิงค์จะพาไปยังฟอร์มสมัครโดยตรง</p>
+
+    <div class="agenda-grid">
+
+      <!-- Early Bird -->
+      <div class="agenda-card">
+        <div class="agenda-card-header">
+          <div class="agenda-badge badge-gold">⭐ Early Bird · Sponsor Round</div>
+          <div class="agenda-card-title">WOOPS Tournament #4</div>
+          <div class="agenda-card-sub">Early Bird Registration — ปิดรับก่อนรอบทั่วไป</div>
+        </div>
+        <div class="agenda-card-body">
+          <div class="agenda-info">
+            <div class="agenda-row"><span class="icon">📅</span> 23–24 May 2026</div>
+            <div class="agenda-row"><span class="icon">📍</span> Alpine Tennis Club</div>
+            <div class="agenda-row"><span class="icon">💰</span> Singles ฿1,699 · Doubles ฿2,999</div>
+            <div class="agenda-row"><span class="icon">🏆</span> Round Robin · All Levels</div>
+            <div class="agenda-row"><span class="icon">⚡</span> ชำระเงินได้ในฟอร์มเลย</div>
+          </div>
+          <!-- 🔗 ใส่ URL Apps Script Early Bird ตรงนี้ -->
+          <a href="YOUR_EARLY_BIRD_APPS_SCRIPT_URL" target="_blank" class="agenda-form-link gold-link">
+            👑 สมัคร Early Bird
+          </a>
+        </div>
+      </div>
+
+      <!-- Open Registration -->
+      <div class="agenda-card">
+        <div class="agenda-card-header">
+          <div class="agenda-badge badge-blue">🎾 Open Registration</div>
+          <div class="agenda-card-title">WOOPS Tournament #4</div>
+          <div class="agenda-card-sub">รอบทั่วไป — เปิดรับ 1 May 2026 เวลา 18:00</div>
+        </div>
+        <div class="agenda-card-body">
+          <div class="agenda-info">
+            <div class="agenda-row"><span class="icon">📅</span> 23–24 May 2026</div>
+            <div class="agenda-row"><span class="icon">📍</span> Alpine Tennis Club</div>
+            <div class="agenda-row"><span class="icon">💰</span> ติดตามช่องทาง Social</div>
+            <div class="agenda-row"><span class="icon">🏆</span> Round Robin · All Levels</div>
+            <div class="agenda-row"><span class="icon">📢</span> ประกาศรายชื่อ 4 May 2026</div>
+          </div>
+          <!-- 🔗 ใส่ URL Apps Script T4 รอบทั่วไป ตรงนี้ -->
+          <a href="YOUR_T4_APPS_SCRIPT_URL" target="_blank" class="agenda-form-link">
+            📨 สมัครรอบทั่วไป
+          </a>
+        </div>
+      </div>
+
+      <!-- Payment Form -->
+      <div class="agenda-card">
+        <div class="agenda-card-header">
+          <div class="agenda-badge badge-green">💳 Payment</div>
+          <div class="agenda-card-title">ชำระค่าสมัคร</div>
+          <div class="agenda-card-sub">สำหรับผู้ที่ได้รับการยืนยันสิทธิ์แล้ว</div>
+        </div>
+        <div class="agenda-card-body">
+          <div class="agenda-info">
+            <div class="agenda-row"><span class="icon">⏰</span> Deadline: 5 May 2026 · 22:00</div>
+            <div class="agenda-row"><span class="icon">🏦</span> KBank · 204-8-29228-6</div>
+            <div class="agenda-row"><span class="icon">📋</span> บจก. ฟรุตตี้ดี</div>
+            <div class="agenda-row"><span class="icon">📎</span> อัพโหลดสลิปในฟอร์ม</div>
+          </div>
+          <!-- 🔗 ใส่ URL Apps Script Payment Form ตรงนี้ -->
+          <a href="YOUR_PAYMENT_APPS_SCRIPT_URL" target="_blank" class="agenda-form-link">
+            💳 ชำระเงิน
+          </a>
+        </div>
+      </div>
+
+      <!-- Coming Soon -->
+      <div class="agenda-card" style="opacity:.6;">
+        <div class="agenda-card-header">
+          <div class="agenda-badge badge-blue">🔜 Coming Soon</div>
+          <div class="agenda-card-title">WOOPS Tournament #5</div>
+          <div class="agenda-card-sub">รายละเอียดจะประกาศเร็วๆ นี้</div>
+        </div>
+        <div class="agenda-card-body">
+          <div class="agenda-info">
+            <div class="agenda-row"><span class="icon">📅</span> TBA 2026</div>
+            <div class="agenda-row"><span class="icon">📍</span> Alpine Tennis Club</div>
+            <div class="agenda-row"><span class="icon">📢</span> ติดตามทาง LINE OA</div>
+          </div>
+          <div style="background:var(--g200);border-radius:12px;padding:13px;text-align:center;font-size:14px;color:var(--g500);font-weight:600;">
+            🔔 เร็วๆ นี้
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider"></div>
+
+<!-- ── PLAYER PROFILES ── -->
+<section id="profiles">
+  <div class="section-inner">
+    <div class="section-tag">👤 Community</div>
+    <h2 class="section-title">Player Profiles</h2>
+    <p class="section-desc">รวมโปรไฟล์นักกีฬาทุกคนที่เคยร่วมแข่งขันใน WOOPS Tournament</p>
+
+    <div class="profiles-search">
+      <input type="text" placeholder="🔍  ค้นหาชื่อผู้เล่น / Search player name...">
+    </div>
+
+    <div class="profiles-grid">
+      <!-- ตัวอย่าง Player Card — ข้อมูลจะดึงจาก Google Sheets -->
+      <div class="profile-card">
+        <div class="profile-avatar">🎾</div>
+        <div class="profile-name">Somchai J.</div>
+        <div class="profile-level">Men's Singles 4.0</div>
+        <div class="profile-stats">
+          <div><div class="profile-stat-num">3</div><div class="profile-stat-label">Events</div></div>
+          <div><div class="profile-stat-num">12</div><div class="profile-stat-label">Wins</div></div>
+        </div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-avatar">🎾</div>
+        <div class="profile-name">Preaw S.</div>
+        <div class="profile-level">Women's Singles 3.5</div>
+        <div class="profile-stats">
+          <div><div class="profile-stat-num">4</div><div class="profile-stat-label">Events</div></div>
+          <div><div class="profile-stat-num">18</div><div class="profile-stat-label">Wins</div></div>
+        </div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-avatar">🎾</div>
+        <div class="profile-name">Krit N.</div>
+        <div class="profile-level">Men's Doubles 3.5</div>
+        <div class="profile-stats">
+          <div><div class="profile-stat-num">2</div><div class="profile-stat-label">Events</div></div>
+          <div><div class="profile-stat-num">8</div><div class="profile-stat-label">Wins</div></div>
+        </div>
+      </div>
+      <div class="profile-card">
+        <div class="profile-avatar">🎾</div>
+        <div class="profile-name">Fah P.</div>
+        <div class="profile-level">Mixed Doubles 3.0</div>
+        <div class="profile-stats">
+          <div><div class="profile-stat-num">3</div><div class="profile-stat-label">Events</div></div>
+          <div><div class="profile-stat-num">10</div><div class="profile-stat-label">Wins</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:36px;">
+      <a href="#" style="font-size:14px;color:var(--blue);font-weight:600;text-decoration:none;">ดูผู้เล่นทั้งหมด →</a>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider"></div>
+
+<!-- ── HALL OF FAME ── -->
+<section id="halloffame">
+  <div class="section-inner">
+    <div class="section-tag">🏆 Champions</div>
+    <h2 class="section-title">Hall of Fame</h2>
+    <p class="section-desc">ผู้ชนะจากทุก Tournament ของ WOOPS Social Club</p>
+
+    <div class="hof-grid">
+      <div class="hof-card">
+        <div class="hof-trophy">🥇</div>
+        <div class="hof-tournament">Tournament #3 · 2025</div>
+        <div class="hof-winner">Somchai Jaidee</div>
+        <div class="hof-category">Men's Singles 4.0</div>
+        <div class="hof-divider"></div>
+        <div class="hof-runner">Runner-up: <strong>Narin P.</strong></div>
+      </div>
+      <div class="hof-card">
+        <div class="hof-trophy">🥇</div>
+        <div class="hof-tournament">Tournament #3 · 2025</div>
+        <div class="hof-winner">Preaw / Fah</div>
+        <div class="hof-category">Women's Doubles 3.5</div>
+        <div class="hof-divider"></div>
+        <div class="hof-runner">Runner-up: <strong>Mint / Joy</strong></div>
+      </div>
+      <div class="hof-card">
+        <div class="hof-trophy">🥇</div>
+        <div class="hof-tournament">Tournament #2 · 2024</div>
+        <div class="hof-winner">Krit / Bank</div>
+        <div class="hof-category">Men's Doubles 4.0</div>
+        <div class="hof-divider"></div>
+        <div class="hof-runner">Runner-up: <strong>Pete / Arm</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-divider"></div>
+
+<!-- ── GALLERY ── -->
+<section id="gallery">
+  <div class="section-inner">
+    <div class="section-tag">📸 Memories</div>
+    <h2 class="section-title">Photo Gallery</h2>
+    <p class="section-desc">ภาพบรรยากาศจากทุก Tournament ที่ผ่านมา</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item large" style="background:linear-gradient(135deg,#0d2060,#1140a8);font-size:60px;">
+        🎾
+        <div class="gallery-overlay">Tournament #3 Finals</div>
+      </div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#1a3a6e,#2563eb);">
+        🏆
+        <div class="gallery-overlay">Award Ceremony</div>
+      </div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#162447,#0f1c3f);">
+        🤝
+        <div class="gallery-overlay">Players' Meet</div>
+      </div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#065f46,#059669);">
+        🌿
+        <div class="gallery-overlay">Alpine Tennis Club</div>
+      </div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#92400e,#d97706);">
+        🎉
+        <div class="gallery-overlay">After Party</div>
+      </div>
+      <div class="gallery-item" style="background:linear-gradient(135deg,#1e1b4b,#4338ca);">
+        📸
+        <div class="gallery-overlay">Group Photo</div>
+      </div>
+    </div>
+
+    <div>
+      <a href="#" class="gallery-upload-btn">📤 Upload Photos</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">WOOPS <span>Social Club</span></div>
+        <div class="footer-tagline">Tennis Community · Bangkok<br>Alpine Tennis Club</div>
+      </div>
+      <div class="footer-links">
+        <h4>Tournament</h4>
+        <a href="#agenda">Agenda & Registration</a>
+        <a href="#halloffame">Hall of Fame</a>
+        <a href="#profiles">Player Profiles</a>
+      </div>
+      <div class="footer-links">
+        <h4>Community</h4>
+        <a href="#gallery">Photo Gallery</a>
+        <a href="#">LINE OA: @woops.socialclub</a>
+      </div>
+      <div class="footer-links">
+        <h4>Registration</h4>
+        <a href="YOUR_EARLY_BIRD_APPS_SCRIPT_URL" target="_blank">Early Bird Form</a>
+        <a href="YOUR_T4_APPS_SCRIPT_URL" target="_blank">T4 Open Registration</a>
+        <a href="YOUR_PAYMENT_APPS_SCRIPT_URL" target="_blank">Payment Form</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 WOOPS Social Club. All rights reserved.</div>
+      <div>Presented by Meji High Protein</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleDrawer() {
+    var drawer   = document.getElementById('drawer');
+    var overlay  = document.getElementById('drawer-overlay');
+    var burger   = document.getElementById('hamburger');
+    var isOpen   = drawer.classList.contains('open');
+    if (isOpen) { closeDrawer(); } else { openDrawer(); }
+  }
+
+  function openDrawer() {
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawer-overlay').classList.add('open');
+    document.getElementById('hamburger').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Close drawer on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeDrawer();
+  });
+</script>
+</body>
+</html>
