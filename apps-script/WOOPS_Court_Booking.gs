@@ -38,11 +38,12 @@ var SHEETS = {
           'cancel_before_hours', 'can_book_for_others', 'can_block', 'can_cancel_any', 'can_manage_users']
 };
 
-// advance_days: 0 = จองได้แค่วันนี้, 1 = วันนี้+พรุ่งนี้ ...  ·  ตัวเลขจำกัดที่เป็น 0 = ไม่จำกัด
+// advance_days: ดูตาราง + จองล่วงหน้าได้กี่วัน (0 = แค่วันนี้, 7 = วันนี้ + อีก 7 วัน)
+// ตัวเลขจำกัด (ชม./วัน, การจองค้าง) ที่เป็น 0 = ไม่จำกัด
 var DEFAULT_ROLES = [
   ['admin',  'ผู้ดูแล / Admin',      30, 0, 0, 0, true,  true,  true,  true],
-  ['member', 'สมาชิก / Member',      7,  2, 4, 3, false, false, false, false],
-  ['user',   'ผู้ใช้ทั่วไป / User',  1,  1, 2, 6, false, false, false, false]
+  ['member', 'สมาชิก / Member',      14, 2, 4, 3, false, false, false, false],
+  ['user',   'ผู้ใช้ทั่วไป / User',  7,  1, 2, 6, false, false, false, false]
 ];
 
 var PASSWORD_ROUNDS = 200;
@@ -188,7 +189,13 @@ function login_(p) {
 function schedule_(p, token) {
   var date = String(p.date || '');
   if (!isDate_(date)) throw err_('invalid_input');
-  var me = token ? userFromToken_(token, roles_()) : null;
+  var roles = roles_();
+  var me = token ? userFromToken_(token, roles) : null;
+  var perms = me ? me.perms : permsFor_('user', roles);   // ยังไม่ล็อกอิน = เห็นเท่าผู้ใช้ทั่วไป
+  var clock = clock_();
+  var ahead = daysBetween_(clock.today, date);
+  // ดูตารางได้แค่ช่วงวันตามเลเวล (คนที่ปิดคอร์ทได้ ดูได้ทุกวัน)
+  if (!perms.can_block && (ahead < 0 || ahead > perms.advance_days)) throw err_('too_far_ahead', { days: perms.advance_days });
   var seeNames = !!(me && me.perms.can_cancel_any);
   var list = activeBookings_().filter(function (b) { return b.date === date; }).map(function (b) {
     var mine = !!(me && b.user_id === me.id);
@@ -197,7 +204,7 @@ function schedule_(p, token) {
     if (mine || seeNames) { out.id = b.id; out.name = b.name; out.note = b.note; }
     return out;
   });
-  return { date: date, clock: clock_(), bookings: list };
+  return { date: date, clock: clock, bookings: list };
 }
 
 function book_(p, token) {

@@ -293,12 +293,12 @@ var I18N = {
     login:'เข้าสู่ระบบ', register:'สมัครสมาชิก', logout:'ออกจากระบบ',
     phone:'เบอร์โทรศัพท์', password:'รหัสผ่าน', full_name:'ชื่อ - นามสกุล', nickname:'ชื่อเล่น',
     pw_hint:'อย่างน้อย 6 ตัวอักษร', welcome:'ยินดีต้อนรับ {name}',
-    your_perms:'สิทธิ์ของคุณ', guest_perms:'ผู้ที่ยังไม่ล็อกอินดูตารางได้ · สมัครฟรีเพื่อจอง',
-    advance:'จองล่วงหน้าได้', advance_v0:'เฉพาะวันนี้', advance_v:'วันนี้ + อีก {n} วัน',
+    your_perms:'สิทธิ์ของคุณ', guest_perms:'ยังไม่ล็อกอิน: ดูตารางล่วงหน้าได้ {n} วัน · สมัครฟรีเพื่อจอง',
+    advance:'ดูตาราง/จองล่วงหน้า', advance_v0:'เฉพาะวันนี้', advance_v:'วันนี้ + อีก {n} วัน',
     max_day:'สูงสุดต่อวัน', max_active:'การจองค้างได้สูงสุด', cancel_before:'ยกเลิกได้ก่อนเวลาเล่น',
     unlimited:'ไม่จำกัด', hours_v:'{n} ชม.', items_v:'{n} รายการ',
     can_others:'จองแทนผู้อื่น', can_block:'ปิดคอร์ท', can_cancel_any:'ยกเลิกของทุกคน', can_users:'จัดการผู้ใช้',
-    perm_line:'<b>{role}</b> · จองล่วงหน้า {adv} · {max}',
+    perm_line:'<b>{role}</b> · ดูตารางและจองล่วงหน้า {adv} · {max}',
     perm_max:'สูงสุด {n} ชม./วัน', perm_nomax:'ไม่จำกัดชั่วโมง',
     roles_title:'สิทธิ์แต่ละระดับ', role:'ระดับ', roles_hint:'แอดมินแก้สิทธิ์ได้ในแท็บ Roles ของ Google Sheet',
     change_pw:'เปลี่ยนรหัสผ่าน', old_pw:'รหัสผ่านเดิม', new_pw:'รหัสผ่านใหม่', save:'บันทึก', saved:'บันทึกแล้ว',
@@ -312,7 +312,7 @@ var I18N = {
     err_phone_taken:'เบอร์นี้สมัครไว้แล้ว — ลองเข้าสู่ระบบ', err_invalid_phone:'เบอร์โทรไม่ถูกต้อง (เช่น 0812345678)',
     err_name_required:'กรุณาใส่ชื่อ', err_weak_password:'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร',
     err_forbidden:'คุณไม่มีสิทธิ์ทำรายการนี้', err_slot_taken:'{court} เวลา {time} มีคนจองไปแล้ว',
-    err_slot_past:'ช่วงเวลานี้ผ่านไปแล้ว', err_too_far_ahead:'สิทธิ์ของคุณจองล่วงหน้าได้ไม่เกิน {days} วัน',
+    err_slot_past:'ช่วงเวลานี้ผ่านไปแล้ว', err_too_far_ahead:'เลเวลของคุณดูตารางและจองล่วงหน้าได้ไม่เกิน {days} วัน',
     err_daily_limit:'สิทธิ์ของคุณจองได้สูงสุด {limit} ชม. ต่อวัน', err_active_limit:'สิทธิ์ของคุณมีการจองค้างได้สูงสุด {limit} รายการ',
     err_cancel_too_late:'ต้องยกเลิกก่อนเวลาเล่นอย่างน้อย {hours} ชม.', err_suspended:'บัญชีนี้ถูกระงับ กรุณาติดต่อแอดมิน',
     err_not_found:'ไม่พบรายการนี้ (อาจถูกยกเลิกไปแล้ว)', err_self_edit:'แก้สิทธิ์หรือระงับบัญชีตัวเองไม่ได้',
@@ -337,12 +337,12 @@ var I18N = {
     login:'Log in', register:'Sign up', logout:'Log out',
     phone:'Phone number', password:'Password', full_name:'Full name', nickname:'Nickname',
     pw_hint:'At least 6 characters', welcome:'Welcome, {name}',
-    your_perms:'Your permissions', guest_perms:'Guests can view the schedule · sign up free to book',
-    advance:'Book ahead', advance_v0:'Today only', advance_v:'Today + {n} day(s)',
+    your_perms:'Your permissions', guest_perms:'Guests: view {n} days ahead · sign up free to book',
+    advance:'View & book ahead', advance_v0:'Today only', advance_v:'Today + {n} day(s)',
     max_day:'Max per day', max_active:'Max upcoming bookings', cancel_before:'Cancel before play',
     unlimited:'Unlimited', hours_v:'{n} h', items_v:'{n}',
     can_others:'Book for others', can_block:'Close courts', can_cancel_any:'Cancel any booking', can_users:'Manage users',
-    perm_line:'<b>{role}</b> · book ahead {adv} · {max}',
+    perm_line:'<b>{role}</b> · view & book ahead: {adv} · {max}',
     perm_max:'max {n} h/day', perm_nomax:'no hourly limit',
     roles_title:'Permission levels', role:'Level', roles_hint:'Admins edit permissions in the Roles tab of the Google Sheet',
     change_pw:'Change password', old_pw:'Current password', new_pw:'New password', save:'Save', saved:'Saved',
@@ -356,7 +356,7 @@ var I18N = {
     err_phone_taken:'This phone number is already registered — try logging in', err_invalid_phone:'Invalid phone number (e.g. 0812345678)',
     err_name_required:'Please enter your name', err_weak_password:'Password must be at least 6 characters',
     err_forbidden:'You don\'t have permission to do this', err_slot_taken:'{court} at {time} was just booked',
-    err_slot_past:'This time slot has passed', err_too_far_ahead:'Your level can book up to {days} day(s) ahead',
+    err_slot_past:'This time slot has passed', err_too_far_ahead:'Your level can view and book up to {days} day(s) ahead',
     err_daily_limit:'Your level can book up to {limit} h per day', err_active_limit:'Your level can hold up to {limit} upcoming bookings',
     err_cancel_too_late:'Bookings must be cancelled at least {hours} h before play', err_suspended:'This account is suspended — please contact an admin',
     err_not_found:'Booking not found (it may already be cancelled)', err_self_edit:'You can\'t change your own level or status',
@@ -607,7 +607,7 @@ function renderBook() {
       max: esc(p.max_hours_per_day ? t('perm_max', { n: p.max_hours_per_day }) : t('perm_nomax'))
     });
   } else {
-    hint = esc(t('guest_perms'));
+    hint = esc(t('guest_perms', { n: p.advance_days }));
   }
 
   $('main').innerHTML =
@@ -750,6 +750,7 @@ function openConfirm() {
 
 function setBookType(type) {
   document.querySelectorAll('#typeSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.type === type); });
+  document.querySelector('#sheet .sheet-head h3').textContent = type === 'block' ? t('type_block') : t('confirm_title');
   var ff = $('forField'); if (ff) ff.hidden = type === 'block';
   $('noteLabel').textContent = type === 'block' ? t('reason') : t('note');
   $('fNote').placeholder = type === 'block' ? t('reason_ph') : '';
@@ -1003,7 +1004,12 @@ document.addEventListener('click', function (e) {
   }
   if (el.dataset.view) { state.view = el.dataset.view; LS.set('wcb_view', state.view); renderBook(); return; }
   if (el.dataset.court && el.dataset.hour) { onCellClick(+el.dataset.hour, el.dataset.court); return; }
-  if (el.dataset.auth) { (el.closest('#authBox') || el.closest('.panel')).innerHTML = authFormHtml(el.dataset.auth); return; }
+  if (el.dataset.auth) {
+    var inModal = el.closest('#authBox');
+    (inModal || el.closest('.panel')).innerHTML = authFormHtml(el.dataset.auth);
+    if (inModal) document.querySelector('#sheet .sheet-head h3').textContent = t(el.dataset.auth);
+    return;
+  }
   if (el.dataset.type) { setBookType(el.dataset.type); return; }
 
   switch (el.dataset.act) {
@@ -1059,12 +1065,12 @@ setInterval(function () {
    กติกาเหมือน apps-script/WOOPS_Court_Booking.gs ทุกข้อ
    ════════════════════════════════════════════════════════════════ */
 var DemoApi = (function () {
-  var KEY = 'wcb_demo_db_v1';
+  var KEY = 'wcb_demo_db_v2';
   var COURTS = ['C1', 'C2', 'C3', 'C4', 'C5'], OPEN = 6, CLOSE = 23, NIGHT = 18;
   var ROLES = [
     { role: 'admin', label: 'ผู้ดูแล / Admin', advance_days: 30, max_hours_per_day: 0, max_active_bookings: 0, cancel_before_hours: 0, can_book_for_others: true, can_block: true, can_cancel_any: true, can_manage_users: true },
-    { role: 'member', label: 'สมาชิก / Member', advance_days: 7, max_hours_per_day: 2, max_active_bookings: 4, cancel_before_hours: 3, can_book_for_others: false, can_block: false, can_cancel_any: false, can_manage_users: false },
-    { role: 'user', label: 'ผู้ใช้ทั่วไป / User', advance_days: 1, max_hours_per_day: 1, max_active_bookings: 2, cancel_before_hours: 6, can_book_for_others: false, can_block: false, can_cancel_any: false, can_manage_users: false }
+    { role: 'member', label: 'สมาชิก / Member', advance_days: 14, max_hours_per_day: 2, max_active_bookings: 4, cancel_before_hours: 3, can_book_for_others: false, can_block: false, can_cancel_any: false, can_manage_users: false },
+    { role: 'user', label: 'ผู้ใช้ทั่วไป / User', advance_days: 7, max_hours_per_day: 1, max_active_bookings: 2, cancel_before_hours: 6, can_book_for_others: false, can_block: false, can_cancel_any: false, can_manage_users: false }
   ];
 
   function fail(code, params) { return { code: code, params: params || {} }; }
@@ -1096,12 +1102,12 @@ var DemoApi = (function () {
     var seedN = 7;
     var rand = function () { seedN = (seedN * 9301 + 49297) % 233280; return seedN / 233280; };
     var bookings = [];
-    for (var d = 0; d <= 3; d++) {
+    for (var d = 0; d <= 14; d++) {
       var date = addDays(c.today, d);
       for (var h = OPEN; h < CLOSE; h++) {
         var busy = h >= 17 && h <= 21 ? 0.62 : h <= 8 ? 0.35 : 0.18;
         COURTS.forEach(function (court) {
-          if (rand() < busy / (d + 1) * 1.4) {
+          if (rand() < busy * Math.max(0.15, 1.2 - d * 0.12)) {
             var u = users[3 + Math.floor(rand() * players.length)];
             bookings.push({ id: id('B'), date: date, hour: h, court: court, user_id: u.id, name: dname(u), type: 'booking', note: '', status: 'active', created_at: stamp() });
           }
@@ -1148,7 +1154,9 @@ var DemoApi = (function () {
     schedule: function (db, p, token) {
       if (!isDate(p.date)) throw fail('invalid_input');
       var me = token ? userOf(db, token) : null;
-      var see = me && permsFor(me.role).can_cancel_any;
+      var pr = me ? permsFor(me.role) : permsFor('user'), ahead = daysBetween(clock().today, p.date);
+      if (!pr.can_block && (ahead < 0 || ahead > pr.advance_days)) throw fail('too_far_ahead', { days: pr.advance_days });
+      var see = me && pr.can_cancel_any;
       return {
         date: p.date, clock: clock(),
         bookings: db.bookings.filter(function (b) { return b.status === 'active' && b.date === p.date; }).map(function (b) {
