@@ -1,6 +1,6 @@
-# คู่มือระบบจองคอร์ท WOOPS Court Booking
+# คู่มือระบบจองคอร์ท Srichaphan Tennis Academy
 
-ระบบจองคอร์ทเทนนิส **5 คอร์ท (C1–C5)** เปิด **06:00–23:00 ทุกวัน** จองเป็น **รายชั่วโมง**
+ระบบจองคอร์ทเทนนิสของ **Srichaphan Tennis Academy** — **5 คอร์ท (C1–C5)** เปิด **06:00–23:00 ทุกวัน** จองเป็น **รายชั่วโมง**
 ผู้ใช้แต่ละเลเวลเห็นตารางและจองล่วงหน้าได้ไม่เท่ากัน
 
 | เลเวล | ดูตาราง + จองล่วงหน้า | จองได้สูงสุด/วัน | จองค้างได้ | ต้องยกเลิกก่อนเล่น | สิทธิ์พิเศษ |
@@ -34,14 +34,14 @@
  ผู้เล่น (มือถือ/คอม)                 Google (ฟรี)
 ┌──────────────────┐   ขอดูตาราง/จอง  ┌───────────────────────┐   อ่าน/เขียน  ┌──────────────────┐
 │  booking.html    │ ───────────────▶ │ Apps Script Web App   │ ────────────▶ │ Google Sheet     │
-│  (หน้าเว็บ WOOPS) │ ◀─────────────── │ WOOPS_Court_Booking.gs│ ◀──────────── │ Users / Bookings │
+│  (หน้าเว็บจอง)    │ ◀─────────────── │ WOOPS_Court_Booking.gs│ ◀──────────── │ Users / Bookings │
 └──────────────────┘   ผลลัพธ์ (JSON)  │ ตรวจสิทธิ์ทุกครั้ง      │               │ / Roles          │
                                      └───────────────────────┘               └──────────────────┘
 ```
 
 | ส่วน | ไฟล์ | อยู่ที่ไหน |
 |---|---|---|
-| หน้าเว็บจอง | `booking.html` | เว็บ WOOPS (repo `woops.socialclub`) |
+| หน้าเว็บจอง | `booking.html` | เว็บ woops.socialclub (repo `woops.socialclub`) |
 | ระบบหลังบ้าน | `apps-script/WOOPS_Court_Booking.gs` | Apps Script ที่ผูกกับ Google Sheet |
 | ฐานข้อมูล | Google Sheet แท็บ **Users**, **Bookings**, **Roles** | Google Drive ของเจ้าของระบบ |
 
@@ -59,12 +59,12 @@
 ## 2. ติดตั้งครั้งแรก (เจ้าของระบบ)
 
 **ต้องมี:** บัญชี Google ที่จะเป็นเจ้าของข้อมูล (แนะนำบัญชีของสโมสร ไม่ใช่บัญชีส่วนตัวของทีมงานคนใดคนหนึ่ง)
-และสิทธิ์แก้ไฟล์ในเว็บ WOOPS (repo `woops.socialclub` บน GitHub)
+และสิทธิ์แก้ไฟล์ใน repo `woops.socialclub` บน GitHub (ที่เก็บหน้าเว็บจอง)
 
 ### ขั้นที่ 1 — สร้าง Google Sheet
 
 1. ล็อกอิน Google ด้วยบัญชีเจ้าของระบบ → เปิด [sheets.new](https://sheets.new)
-2. ตั้งชื่อชีท (มุมซ้ายบน "Untitled spreadsheet") เป็น **WOOPS Court Booking**
+2. ตั้งชื่อชีท (มุมซ้ายบน "Untitled spreadsheet") เป็น **Srichaphan Court Booking**
 3. ไม่ต้องพิมพ์อะไรในชีท ปล่อยว่างไว้ — สคริปต์จะสร้างแท็บให้เอง
 
 ### ขั้นที่ 2 — วางโค้ด Apps Script
@@ -73,7 +73,7 @@
    จะเปิดแท็บใหม่ เป็นหน้าเขียนโค้ด มีไฟล์ `Code.gs` ที่มี `function myFunction() {}` อยู่
 2. คลิกในช่องโค้ด → **Ctrl+A** (Mac: Cmd+A) → **Delete** ให้ว่างเปล่า
 3. เปิดไฟล์ `apps-script/WOOPS_Court_Booking.gs` → ก๊อปทั้งไฟล์ → วางลงไป
-4. ตั้งชื่อโปรเจกต์ (มุมซ้ายบน "Untitled project") เป็น **WOOPS Court Booking**
+4. ตั้งชื่อโปรเจกต์ (มุมซ้ายบน "Untitled project") เป็น **Srichaphan Court Booking**
 5. กด **Ctrl+S** (หรือไอคอนแผ่นดิสก์ 💾) เพื่อบันทึก
 
 ### ขั้นที่ 3 — รัน `setup` (สร้างแท็บในชีท)
@@ -85,7 +85,7 @@
 4. เลือกบัญชี Google ของคุณ
 5. จะเจอหน้า **"Google hasn't verified this app"** (หน้าตาน่ากลัว แต่ปกติ)
    → กด **Advanced** (ข้อความเล็ก ๆ ด้านล่างซ้าย)
-   → กด **Go to WOOPS Court Booking (unsafe)**
+   → กด **Go to Srichaphan Court Booking (unsafe)**
    ❗ ปลอดภัย เพราะเป็นสคริปต์ของคุณเองที่เพิ่งวางเข้าไป Google แค่ยังไม่ได้ตรวจเพราะไม่ได้เผยแพร่สาธารณะ
 6. หน้าถัดไปบอกว่าสคริปต์ขอสิทธิ์อะไรบ้าง (ดู/แก้ Google Sheets, เชื่อมต่อภายนอก) → กด **Allow**
 7. ดูที่ **Execution log** ด้านล่าง ต้องขึ้น
@@ -106,7 +106,7 @@
 3. กรอก
    | ช่อง | ใส่ |
    |---|---|
-   | Description | `WOOPS Court Booking v1` |
+   | Description | `Srichaphan Court Booking v1` |
    | Execute as | **Me (อีเมลของคุณ)** |
    | Who has access | **Anyone** |
 
@@ -122,7 +122,7 @@
 เปิด URL ที่ก๊อปมาในแท็บใหม่ของ browser ต้องเห็นข้อความประมาณนี้
 
 ```json
-{"ok":true,"service":"WOOPS Court Booking","clock":{"today":"2026-10-17","hour":13,"now":1792216320000}}
+{"ok":true,"service":"Srichaphan Tennis Academy Court Booking","clock":{"today":"2026-10-17","hour":13,"now":1792216320000}}
 ```
 
 - เห็นแบบนี้ = หลังบ้านพร้อม ✅
@@ -219,7 +219,7 @@
 
 ### สมัครและล็อกอิน
 
-1. เปิด `https://<เว็บ WOOPS>/booking.html` (หรือหน้าแรก → เมนู **Court Booking**)
+1. เปิด `https://<เว็บ>/booking.html` (หรือหน้าแรก → เมนู **Court Booking**)
 2. กดไอคอนคนมุมขวาบน → แท็บ **สมัครสมาชิก**
 3. กรอกเบอร์โทร, ชื่อ-นามสกุล, ชื่อเล่น (ไม่บังคับ), รหัสผ่านอย่างน้อย 6 ตัว → **สมัครสมาชิก**
 4. ครั้งต่อไปใช้เบอร์ + รหัสผ่าน **เข้าสู่ระบบ** (ระบบจำการล็อกอินไว้ 30 วัน)

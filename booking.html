@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Court Booking · WOOPS Social Club</title>
+<title>จองคอร์ท · Srichaphan Tennis Academy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -34,9 +34,9 @@
   .topbar { position:sticky; top:0; z-index:50; background:rgba(10,18,40,.96); backdrop-filter:blur(10px);
             border-bottom:1px solid rgba(212,168,67,.2); height:60px; padding:0 16px;
             display:flex; align-items:center; justify-content:space-between; gap:12px; }
-  .brand { display:flex; align-items:center; gap:8px; color:#fff; text-decoration:none; font-weight:900; font-size:17px; letter-spacing:-.4px; white-space:nowrap; }
-  .brand .badge { background:linear-gradient(135deg,var(--gold-dk),var(--gold),var(--gold-lt)); color:var(--navy3);
-                  font-size:10px; font-weight:800; padding:3px 9px; border-radius:20px; letter-spacing:.8px; text-transform:uppercase; }
+  .brand { display:flex; flex-direction:column; justify-content:center; min-width:0; color:#fff; text-decoration:none; line-height:1.15; }
+  .brand-name { font-family:'Inter',sans-serif; font-weight:800; font-size:15px; letter-spacing:-.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .brand-sub { font-size:11px; font-weight:600; color:var(--gold-lt); letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .top-actions { display:flex; align-items:center; gap:8px; }
   .lang { display:flex; background:rgba(255,255,255,.08); border-radius:10px; padding:3px; }
   .lang button { border:0; background:transparent; color:rgba(255,255,255,.6); font-size:12px; font-weight:700; padding:5px 9px; border-radius:7px; }
@@ -243,7 +243,7 @@
 <body>
 
 <header class="topbar">
-  <a href="index.html" class="brand">WOOPS <span class="badge">Courts</span></a>
+  <a href="index.html" class="brand"><span class="brand-name">Srichaphan Tennis Academy</span><span class="brand-sub">Court Booking · จองคอร์ท</span></a>
   <div class="top-actions">
     <div class="lang"><button data-lang="th">TH</button><button data-lang="en">EN</button></div>
     <button class="avatar" id="btnAvatar" aria-label="account"></button>
@@ -1091,7 +1091,7 @@ var DemoApi = (function () {
   function seed() {
     var c = clock();
     var users = [
-      { id: 'U-admin', phone: '0800000001', password: 'admin123', name: 'Admin WOOPS', nickname: 'Admin', role: 'admin', status: 'active', created_at: stamp() },
+      { id: 'U-admin', phone: '0800000001', password: 'admin123', name: 'Admin Srichaphan', nickname: 'Admin', role: 'admin', status: 'active', created_at: stamp() },
       { id: 'U-member', phone: '0800000002', password: 'member123', name: 'สมาชิก ทดลอง', nickname: 'Mem', role: 'member', status: 'active', created_at: stamp() },
       { id: 'U-user', phone: '0800000003', password: 'user123', name: 'ผู้ใช้ ทดลอง', nickname: 'Guest', role: 'user', status: 'active', created_at: stamp() }
     ];
@@ -1117,7 +1117,7 @@ var DemoApi = (function () {
     var tmr = addDays(c.today, 1);
     bookings = bookings.filter(function (b) { return !(b.date === tmr && b.court === 'C5' && b.hour < 9); });
     [6, 7, 8].forEach(function (h) {
-      bookings.push({ id: id('B'), date: tmr, hour: h, court: 'C5', user_id: 'U-admin', name: 'Admin WOOPS (Admin)', type: 'block', note: 'ซ่อมพื้นคอร์ท / Maintenance', status: 'active', created_at: stamp() });
+      bookings.push({ id: id('B'), date: tmr, hour: h, court: 'C5', user_id: 'U-admin', name: 'Admin Srichaphan (Admin)', type: 'block', note: 'ซ่อมพื้นคอร์ท / Maintenance', status: 'active', created_at: stamp() });
     });
     return { users: users, bookings: bookings };
   }

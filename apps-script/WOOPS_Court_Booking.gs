@@ -1,5 +1,5 @@
 /**
- * WOOPS Court Booking — ระบบจองคอร์ทเทนนิส (backend: Google Sheet + Apps Script Web App)
+ * Srichaphan Tennis Academy — ระบบจองคอร์ทเทนนิส (backend: Google Sheet + Apps Script Web App)
  *
  * วิธีใช้ (ละเอียดใน WOOPS-Court-Booking-Setup.md):
  *   1) สร้าง Google Sheet ใหม่ → Extensions → Apps Script → วางโค้ดนี้ทั้งไฟล์
@@ -18,6 +18,7 @@
 
 // ===== แก้ตรงนี้ได้ =====
 var CONFIG = {
+  VENUE_NAME: 'Srichaphan Tennis Academy',
   COURTS: ['C1', 'C2', 'C3', 'C4', 'C5'],
   OPEN_HOUR: 6,            // ช่องแรก 06:00–07:00
   CLOSE_HOUR: 23,          // ปิด 23:00 → ช่องสุดท้าย 22:00–23:00
@@ -101,7 +102,7 @@ var ACTIONS = {
 };
 
 function doGet() {
-  return json_({ ok: true, service: 'WOOPS Court Booking', clock: clock_() });
+  return json_({ ok: true, service: CONFIG.VENUE_NAME + ' Court Booking', clock: clock_() });
 }
 
 function doPost(e) {
